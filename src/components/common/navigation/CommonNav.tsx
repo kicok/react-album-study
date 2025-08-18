@@ -21,5 +21,5 @@ export default function CommonNav() {
       </Link>
     );
   });
-  return <div className={styles.navigation}>{navLinks}</div>;
+  return <nav className={styles.navigation}>{navLinks}</nav>;
 }

@@ -36,6 +36,22 @@ export default function index() {
     }
     loadImages();
   }, [searchValue, pageValue, per_page]);
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    }
+
+    if (open) {
+      document.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open]);
   return (
     <div className={styles.page}>
       {/* 공통 헤더 UI 부분 */}

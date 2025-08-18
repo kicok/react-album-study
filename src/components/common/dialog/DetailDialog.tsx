@@ -6,9 +6,16 @@ interface Props {
   handleDialog: (eventValue: boolean) => void;
 }
 function DetailDialog({ data, handleDialog }: Props) {
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // e.target이 overlay일 때만 닫기 (내용 클릭 시 무시)
+    if (e.target === e.currentTarget) {
+      handleDialog(false);
+    }
+  };
+
   const closeDialog = () => handleDialog(false);
   return (
-    <div className={styles.container}>
+    <div className={styles.container} onClick={handleOverlayClick}>
       <div className={styles.container__dialog}>
         <div className={styles.container__dialog__header}>
           <div className={styles.close}>

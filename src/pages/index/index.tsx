@@ -4,40 +4,28 @@ import CommonNav from "@/components/common/navigation/CommonNav";
 import CommonFooter from "@/components/common/footer/CommonFooter";
 import styles from "./styles/index.module.scss";
 import Card from "./components/Card";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import { useSearchStore } from "@/stoer/searchStore";
 import type { CardDto } from "./types/card";
+import { fetchImages } from "./searchService";
 
 export default function index() {
-  const [imgUrls, setImgUrls] = useState([]);
-  const getData = async () => {
-    const clientId = "qwAyAqPMMbd4ghKqAZTexh1Tr06vAlKG8faelVc_qU0";
-    const API_URL = `https://api.unsplash.com/photos/?client_id=${clientId}`;
-    const PER_PAGE = 30;
-    const searchValue = "Korea";
-    const pageValue = 100;
-
-    try {
-      const res = await axios.get(
-        `${API_URL}&query=${searchValue}&page=${pageValue}&per_page=${PER_PAGE}`
-      );
-
-      console.log("res", res);
-      if (res.status === 200) {
-        setImgUrls(res.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [imgUrls, setImgUrls] = useState<CardDto[]>([]);
+  const { pageValue, searchValue, per_page } = useSearchStore();
 
   const cardList = imgUrls.map((card: CardDto) => {
     return <Card data={card} key={card.id} />;
   });
 
   useEffect(() => {
-    getData();
-  }, []);
+    async function loadImages() {
+      try {
+        const data = await fetchImages(searchValue, pageValue, per_page);
+        setImgUrls(data);
+      } catch (error) {}
+    }
+    loadImages();
+  }, [searchValue, pageValue, per_page]);
   return (
     <div className={styles.page}>
       {/* 공통 헤더 UI 부분 */}

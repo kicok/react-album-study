@@ -8,13 +8,15 @@ import { useEffect, useState } from "react";
 import { useSearchStore } from "@/stoer/searchStore";
 import type { CardDto } from "./types/card";
 import { fetchImages } from "./searchService";
+import DetailDialog from "@/components/common/dialog/DetailDialog";
 
 export default function index() {
   const [imgUrls, setImgUrls] = useState<CardDto[]>([]);
   const { pageValue, searchValue, per_page } = useSearchStore();
+  const [open, setOpen] = useState(false);
 
   const cardList = imgUrls.map((card: CardDto) => {
-    return <Card data={card} key={card.id} />;
+    return <Card data={card} key={card.id} handleDialog={setOpen} />;
   });
 
   useEffect(() => {
@@ -48,6 +50,8 @@ export default function index() {
       </div>
       {/* 공통 푸터 UI 부분 */}
       <CommonFooter />
+
+      {open && <DetailDialog />}
     </div>
   );
 }

@@ -1,9 +1,13 @@
 import type { CardDto } from "../types/card";
 import styles from "./Card.module.scss";
 
-function Card({ data }: { data: CardDto }) {
+interface Props {
+  data: CardDto;
+  handleDialog: (eventValue: boolean) => void;
+}
+function Card({ data, handleDialog }: Props) {
   const openDialog = () => {
-    console.log("함수호출");
+    handleDialog(true);
   };
   return (
     <div className={styles.card} onClick={openDialog}>

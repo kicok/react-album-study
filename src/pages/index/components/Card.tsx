@@ -4,10 +4,12 @@ import styles from "./Card.module.scss";
 interface Props {
   data: CardDto;
   handleDialog: (eventValue: boolean) => void;
+  handleSetData: (eventValue: CardDto) => void;
 }
-function Card({ data, handleDialog }: Props) {
+function Card({ data, handleDialog, handleSetData }: Props) {
   const openDialog = () => {
     handleDialog(true);
+    handleSetData(data);
   };
   return (
     <div className={styles.card} onClick={openDialog}>

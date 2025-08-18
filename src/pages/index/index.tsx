@@ -11,12 +11,20 @@ import { fetchImages } from "./searchService";
 import DetailDialog from "@/components/common/dialog/DetailDialog";
 
 export default function index() {
+  const [imgData, setImgData] = useState<CardDto>();
   const [imgUrls, setImgUrls] = useState<CardDto[]>([]);
   const { pageValue, searchValue, per_page } = useSearchStore();
   const [open, setOpen] = useState(false);
 
   const cardList = imgUrls.map((card: CardDto) => {
-    return <Card data={card} key={card.id} handleDialog={setOpen} />;
+    return (
+      <Card
+        data={card}
+        key={card.id}
+        handleDialog={setOpen}
+        handleSetData={setImgData}
+      />
+    );
   });
 
   useEffect(() => {
@@ -51,7 +59,9 @@ export default function index() {
       {/* 공통 푸터 UI 부분 */}
       <CommonFooter />
 
-      {open && <DetailDialog />}
+      {open && imgData && (
+        <DetailDialog data={imgData} handleDialog={setOpen} />
+      )}
     </div>
   );
 }

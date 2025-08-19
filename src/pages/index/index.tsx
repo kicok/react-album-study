@@ -9,12 +9,23 @@ import { useSearchStore } from "@/stoer/searchStore";
 import type { CardDto } from "./types/card";
 import { fetchImages } from "./searchService";
 import DetailDialog from "@/components/common/dialog/DetailDialog";
+import { useQuery } from "@tanstack/react-query";
 
 export default function index() {
   const [imgData, setImgData] = useState<CardDto>();
-  const [imgUrls, setImgUrls] = useState<CardDto[]>([]);
   const { pageValue, searchValue, per_page } = useSearchStore();
   const [open, setOpen] = useState(false);
+
+  const {
+    data: imgUrls = [],
+    isLoading,
+    isError,
+  } = useQuery<CardDto[]>({
+    queryKey: ["images", searchValue, pageValue, per_page],
+    queryFn: () => fetchImages(searchValue, pageValue, per_page),
+    enabled: !!searchValue, // 검색어 있을 때만 실행
+    staleTime: 1000 * 60, // 1분동안 캐싱
+  });
 
   const cardList = imgUrls.map((card: CardDto) => {
     return (
@@ -26,16 +37,6 @@ export default function index() {
       />
     );
   });
-
-  useEffect(() => {
-    async function loadImages() {
-      try {
-        const data = await fetchImages(searchValue, pageValue, per_page);
-        setImgUrls(data);
-      } catch (error) {}
-    }
-    loadImages();
-  }, [searchValue, pageValue, per_page]);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {

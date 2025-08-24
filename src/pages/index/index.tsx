@@ -13,7 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function index() {
   const [imgData, setImgData] = useState<CardDto>();
-  const { pageValue, searchValue, per_page } = useSearchStore();
+  const { page, search, per_page } = useSearchStore();
   const [open, setOpen] = useState(false);
 
   const {
@@ -21,9 +21,9 @@ export default function index() {
     isLoading,
     isError,
   } = useQuery<CardDto[]>({
-    queryKey: ["images", searchValue, pageValue, per_page],
-    queryFn: () => fetchImages(searchValue, pageValue, per_page),
-    enabled: !!searchValue, // 검색어 있을 때만 실행
+    queryKey: ["images", search, page, per_page],
+    queryFn: () => fetchImages(search, page, per_page),
+    enabled: !!search, // 검색어 있을 때만 실행
     staleTime: 1000 * 60, // 1분동안 캐싱
   });
 

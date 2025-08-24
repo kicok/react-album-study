@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./CommonNav.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import navJson from "./nav.json";
+import { useSearchStore } from "@/stoer/searchStore";
 
 interface Navigation {
   index: number;
@@ -13,13 +14,43 @@ interface Navigation {
 
 export default function CommonNav() {
   const [navigation, setNavigation] = useState<Navigation[]>(navJson);
+  const { page, setPage } = useSearchStore();
+  const { search, setSearch } = useSearchStore();
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log("location", location.pathname);
+    navigation.forEach((nav: Navigation) => {
+      nav.isActive = false;
+
+      if (
+        nav.path === location.pathname ||
+        location.pathname.includes(nav.path)
+      ) {
+        nav.isActive = true;
+        setSearch(nav.searchValue);
+        console.log("setSearch");
+        setPage(1);
+      }
+    });
+    setNavigation([...navigation]);
+  }, [location.pathname]);
 
   const navLinks = navigation.map((item: Navigation) => {
     return (
-      <Link to={item.path} className={styles.navigation__menu} key={item.path}>
+      <Link
+        to={item.path}
+        className={
+          item.isActive
+            ? `${styles.navigation__menu} ${styles.active}`
+            : `${styles.navigation__menu} ${styles.inactive}`
+        }
+        key={item.path}
+      >
         <span className={styles.navigation__menu__label}>{item.label}</span>
       </Link>
     );
   });
+
   return <nav className={styles.navigation}>{navLinks}</nav>;
 }

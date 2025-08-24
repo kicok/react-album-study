@@ -1,24 +1,34 @@
 import { create } from "zustand";
+import { devtools } from "zustand/middleware";
 
 interface SearchState {
   per_page: number;
-  pageValue: number;
-  searchValue: string;
-  updatePageValue: (page: number) => void;
-  updateSearchValue: (search: string) => void;
+  page: number;
+  search: string;
+  setPage: (page: number) => void;
+  setSearch: (search: string) => void;
   reset: () => void;
 }
 
-export const useSearchStore = create<SearchState>((set) => ({
-  per_page: 30,
-  pageValue: 1,
-  searchValue: "Korea",
+export const useSearchStore = create<SearchState>()(
+  devtools(
+    (set) => ({
+      per_page: 30,
+      page: 1,
+      search: "Korea",
 
-  updatePageValue: (page) => set({ pageValue: page }),
-  updateSearchValue: (search) => set({ searchValue: search }),
-  reset: () =>
-    set((state) => ({
-      pageValue: 1,
-      searchValue: "",
-    })),
-}));
+      setPage: (page) => set({ page }, false, "setPage"),
+      setSearch: (search) => set({ search }, false, "setSearch"),
+      reset: () =>
+        set(
+          {
+            page: 1,
+            search: "",
+          },
+          false,
+          "reset"
+        ),
+    }),
+    { name: "SearchStore" } // Redux DevTools에서 보여질 스토어 이름
+  )
+);

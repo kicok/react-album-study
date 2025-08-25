@@ -50,8 +50,15 @@
 
       color: $color-black-900;
     }
-    &:active {
+    &.active {
       background-color: $color-gray-100;
+      border-radius: 4px;
+
+      color: $color-black-900;
+    }
+
+    &.inactive {
+      background-color: $color-white-000;
       border-radius: 4px;
 
       color: $color-black-900;

@@ -3,7 +3,7 @@ import styles from "./CommonSearchBar.module.scss";
 import { useSearchStore } from "@/stoer/searchStore";
 
 function CommonSearchBar() {
-  const { search, setSearch } = useSearchStore();
+  const { setSearch } = useSearchStore();
   const [text, setText] = useState("");
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,11 +36,10 @@ function CommonSearchBar() {
           placeholder="찾으실 이미지를 검색하세요."
           className={styles.searchBar__search__input}
           onChange={onChange}
-          onClick={onSearch}
           value={text}
           onKeyDown={handleKeyDown}
         />
-        <img src="src/assets/icons/icon-search.svg" alt="" />
+        <img src="src/assets/icons/icon-search.svg" alt="" onClick={onSearch} />
       </div>
     </div>
   );

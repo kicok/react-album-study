@@ -21,7 +21,7 @@ export const useSearchStore = create<SearchState>()(
       page: 1,
       search: "Korea",
       total: 0,
-      totalPage: 0,
+      totalPages: 0,
 
       setPage: (page) => set({ page }, false, "setPage"),
       setTotal: (total) => set({ total }, false, "setTotal"),

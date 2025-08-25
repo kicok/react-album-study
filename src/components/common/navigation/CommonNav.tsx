@@ -19,17 +19,14 @@ export default function CommonNav() {
   const location = useLocation();
 
   useEffect(() => {
-    console.log("location", location.pathname);
     navigation.forEach((nav: Navigation) => {
       nav.isActive = false;
-
       if (
         nav.path === location.pathname ||
         location.pathname.includes(nav.path)
       ) {
         nav.isActive = true;
         setSearch(nav.searchValue);
-        console.log("setSearch");
         setPage(1);
       }
     });

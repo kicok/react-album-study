@@ -1,3 +1,9 @@
+export interface ResDto {
+  results: CardDto[];
+  total: number;
+  total_pages: number;
+}
+
 export interface CardDto {
   id: string;
   slug: string;

@@ -6,7 +6,7 @@ import styles from "./styles/index.module.scss";
 import Card from "./components/Card";
 import { useEffect, useState } from "react";
 import { useSearchStore } from "@/stoer/searchStore";
-import type { CardDto } from "./types/card";
+import type { CardDto, ResDto } from "./types/card";
 import { fetchImages } from "./searchService";
 import DetailDialog from "@/components/common/dialog/DetailDialog";
 import { useQuery } from "@tanstack/react-query";
@@ -14,20 +14,24 @@ import { useQuery } from "@tanstack/react-query";
 export default function index() {
   const [imgData, setImgData] = useState<CardDto>();
   const { page, search, per_page } = useSearchStore();
+  const { setTotal, setTotalPages } = useSearchStore();
   const [open, setOpen] = useState(false);
 
-  const {
-    data: imgUrls = [],
-    isLoading,
-    isError,
-  } = useQuery<CardDto[]>({
+  const { data, isLoading, isError } = useQuery<ResDto>({
     queryKey: ["images", search, page, per_page],
     queryFn: () => fetchImages(search, page, per_page),
     enabled: !!search, // 검색어 있을 때만 실행
     staleTime: 1000 * 60, // 1분동안 캐싱
   });
 
-  const cardList = imgUrls.map((card: CardDto) => {
+  useEffect(() => {
+    if (data) {
+      setTotal(data.total);
+      setTotalPages(data.total_pages);
+    }
+  }, [data, setTotal, setTotalPages]);
+
+  const cardList = data?.results.map((card: CardDto) => {
     return (
       <Card
         data={card}

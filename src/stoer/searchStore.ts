@@ -5,8 +5,12 @@ interface SearchState {
   per_page: number;
   page: number;
   search: string;
+  total: number;
+  totalPages: number;
   setPage: (page: number) => void;
   setSearch: (search: string) => void;
+  setTotal: (total: number) => void;
+  setTotalPages: (totalPages: number) => void;
   reset: () => void;
 }
 
@@ -16,8 +20,13 @@ export const useSearchStore = create<SearchState>()(
       per_page: 30,
       page: 1,
       search: "Korea",
+      total: 0,
+      totalPage: 0,
 
       setPage: (page) => set({ page }, false, "setPage"),
+      setTotal: (total) => set({ total }, false, "setTotal"),
+      setTotalPages: (totalPages) =>
+        set({ totalPages }, false, "setTotalPages"),
       setSearch: (search) => set({ search }, false, "setSearch"),
       reset: () =>
         set(
